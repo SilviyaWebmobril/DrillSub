@@ -135,30 +135,74 @@ export default class  SideBar extends Component  {
                     </TouchableOpacity>
                     <TouchableOpacity 
                      onPress={() => {
-                        
                         this.props.navigation.navigate('ChangePasswordScreen')
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            //key: 'ChangePassword', // here there will be no key as 
+                            actions: [
+                                NavigationActions.navigate({ routeName: 'ChangePassword' }),
+                            
+                            ],
+                        })
+                  
+                        this.props.navigation.dispatch(resetAction);
+                        
                         }}
-                    >
+                        >
                         <Text style={styles.headingStyle}> Change Password </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                     onPress={()=>{this.props.navigation.navigate('SavedItemScreen')
-                     const resetAction = StackActions.reset({
-                        index: 0,
-                        key: 'SavedItem',
-                        actions: [NavigationActions.navigate({ routeName: 'SavedItemStack' })],
-                      })
-                      this.props.navigation.dispatch(resetAction);}}>
+                     onPress={()=>{
+                         // Currently we have only homeStack which contains two screens so 
+                         // navigating to SavedItemScreen Stack first 
+                         // now to restart the component provide the index of the SavedItemStack
+                         //without the key
+                         this.props.navigation.navigate('SavedItemScreen')
+                            const resetAction = StackActions.reset({
+                                index: 0,
+                                //key: 'SavedItem', // here there will be no key as 
+                                actions: [
+                                    NavigationActions.navigate({ routeName: 'SavedItem' }),
+                                
+                                ],
+                            })
+                      
+                            this.props.navigation.dispatch(resetAction);}}
+                      >
                         <Text style={styles.headingStyle}> Saved Items </Text>
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={() => {
                         
                         this.props.navigation.navigate('PrivacyPolicyScreen')
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            //key: 'PrivacyPolicy', // here there will be no key as 
+                            actions: [
+                                NavigationActions.navigate({ routeName: 'PrivacyPolicy' }),
+                            
+                            ],
+                        })
+                  
+                        this.props.navigation.dispatch(resetAction);
                         }}>
                         <Text style={styles.headingStyle}> Privacy Policy </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={()=>{this.props.navigation.navigate('ContactUsScreen')}}>
+                    onPress={()=>{
+                        this.props.navigation.navigate('ContactUsScreen')
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            //key: 'Contact', // here there will be no key as 
+                            actions: [
+                                NavigationActions.navigate({ routeName: 'Contact' }),
+                            
+                            ],
+                        })
+                  
+                        this.props.navigation.dispatch(resetAction);
+                        
+                        
+                        }}>
 
                         <Text style={styles.headingStyle}> Contact Us </Text>
                     </TouchableOpacity>

@@ -24,11 +24,17 @@ class Home  extends Component {
         this.props.load(true);
         Axios.get(ApiUrl.base_url + ApiUrl.banner_api).then(response => {
 
+            
             this.props.load(false);
+            if(response.data.status == "SUCCESS"){
+                
+                this.setState({responseData:response.data.data});
+            }
            
-            this.setState({responseData:response.data.data});
+            
 
         }).catch(error => {
+            
             this.props.load(false);
             Alert.alert(
                 'Network Error',
@@ -47,8 +53,10 @@ class Home  extends Component {
         Axios.get(ApiUrl.base_url + ApiUrl.fetch_category).then(response => {
 
             this.props.load(false);
-           
+           if(response.data.status == "SUCCESS"){
             this.setState({categoryData:response.data.data});
+           }
+           
 
         }).catch(error => {
             this.props.load(false);
@@ -82,7 +90,15 @@ class Home  extends Component {
     render(){
         return(
             <View style={{height:null}}>
-                <CustomBanner  images={this.state.responseData}/>
+                {
+                    this.state.responseData.length > 0
+                    ?
+                        <CustomBanner  images={this.state.responseData}/>
+                    :
+                    <View/>
+
+                }
+               
                 <Text style={styles.buildText}>Build Your Project</Text>
                 <FlatList
                       numColumns={DeviceInfo.isTablet() ? 3 : 2 }
@@ -106,6 +122,7 @@ const styles = StyleSheet.create({
     buildText:{
         fontSize:15,
         flex:1,
+        marginTop:10,
         fontWeight:"bold",
         alignSelf:"center"
     }

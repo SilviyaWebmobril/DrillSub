@@ -14,8 +14,6 @@ import RNFetchBlob from 'rn-fetch-blob'
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
 
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-
 
 export default class CategoryDetails extends Component {
 
@@ -276,6 +274,7 @@ export default class CategoryDetails extends Component {
             alert("Please enter quantity");
             return;
         }
+        this.setState({loading:true});
         const  cat_id = this.props.navigation.getParam('id');
         const size  = this.state.dia;
         const quantity = this.state.quantity;
@@ -289,6 +288,7 @@ export default class CategoryDetails extends Component {
         Axios.post("https://webmobril.org/dev/drillsub/api/Mobileapi/pdffile",formdata).then(async res =>{
 
         console.log("respp =>",res);
+        this.setState({loading:false});
             await RNPrint.print({
                 html: res.data.category_data
               })
@@ -346,56 +346,35 @@ export default class CategoryDetails extends Component {
                 const size  = this.state.dia;
                 const quantity = this.state.quantity;
                 const url =  "https://webmobril.org/dev/drillsub/api/Mobileapi/pdffilenew?cat_id="+cat_id+"&size="+size+"&quantity="+quantity;
-                
+                this.setState({loading:true});
                 Axios.get(url).then(response => {
+                    this.setState({loading:false});
 
                      console.log("res get",response.data.data);
-                    // const { config, fs } = RNFetchBlob
-                    // let dirs = RNFetchBlob.fs.dirs
-                    // let options = {
-                    //   fileCache: true,
-                    //   addAndroidDownloads : {
-                    //     useDownloadManager : true,
-                    //     notification : true,
-                    //     path:  dirs.DocumentDir  + "/drillsub.pdf",
-                    //     description : 'pdf'
-                    //   }
-                    // }
-                    // config(options).fetch('GET', response.data.data).then(async(res) => {
-                    //     console.log("response === > ",res);
-                    //     let filePath = res.path();
-                    //     let options = {
-                    //         type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
-                    //         url:   Platform.OS === 'android' ? "file://"+filePath : filePath
-                    //       };
-                    //       console.log("opttions=>",options);
-                    //       await Share.open(options);
-                       
-                    // });
-
-                    RNFS.downloadFile({
-                       
-                        fromUrl: response.data.data,
-                        toFile: Platform.OS == 'android' ?
-                        `${RNFS.ExternalDirectoryPath}/drillsub.pdf`
-                        : `${RNFS.DocumentDirectoryPath}/drillsub.pdf`,
-                      }).promise.then(async(r) => {
-                          console.log("response xtfgh3456789-=>",r);
-                        Platform.OS === 'android'
-                        ? ToastAndroid.show('File Downloaded ...',ToastAndroid.LONG)
-                        : Alert.alert("File Downloaded..")
+                    const { config, fs } = RNFetchBlob
+                    let dirs = RNFetchBlob.fs.dirs
+                    let options = {
+                      fileCache: true,
+                      addAndroidDownloads : {
+                        useDownloadManager : true,
+                        notification : true,
+                        path:  dirs.DownloadDir  + "/drillsub.pdf",
+                        description : 'pdf'
+                      }
+                    }
+                    config(options).fetch('GET', response.data.data).then(async(res) => {
+                        console.log("response === > ",res);
+                        let filePath = res.path();
                         let options = {
                             type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
-                            url:   Platform.OS == 'android' ?
-                            `file://${RNFS.ExternalDirectoryPath}/drillsub.pdf`
-                            : `${RNFS.DocumentDirectoryPath}/drillsub.pdf`
-                            };
-                        await Share.open(options)
-                      }).catch(error =>{
+                            url:   Platform.OS === 'android' ? "file://"+filePath : filePath
+                          };
+                          console.log("opttions=>",options);
+                          await Share.open(options);
+                       
+                    });
 
-                        console.log("get error",error);
-                      });
-    
+                   
 
                 }).catch(error =>{
 
@@ -404,44 +383,6 @@ export default class CategoryDetails extends Component {
 
            
               
-               
-                // var formdata = new FormData();
-                // formdata.append("cat_id",cat_id);
-                // formdata.append("size",size);
-                // formdata.append("quantity",quantity);
-                // Axios.post("https://webmobril.org/dev/drillsub/api/Mobileapi/pdffile",formdata).then(async res =>{
-        
-                // console.log("respp =>",res);
-                // let options = {
-                //     html: res.data.category_data,
-                //     directory:"docs",   
-                //     base64: true,   
-                //   };
-              
-                //   let file = await RNHTMLtoPDF.convert(options);
-
-                 
-                //     var base64Data = `data:application/pdf;base64,` + file.filePath;
-                //     let options1 = {
-                //         type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
-                //         url:  base64Data
-                //     };
-                //     await Share.open(options1);
-                    // remove the image or pdf from device's storage
-                    
-        
-                // }).catch(err => {
-                //     Alert.alert(
-                //         'Generate PDF',
-                //         "Some Error Occured. Please try again Later!",
-                //         [
-                    
-                //         {text: 'OK', onPress: () => {}},
-                        
-                //         ], 
-                //         { cancelable: false }
-                //         )
-                // })
 
                
                
@@ -482,7 +423,7 @@ export default class CategoryDetails extends Component {
             <View style={{flex:1}}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
-                    <Text style={styles.size}>Size</Text>
+                    <Text style={styles.size}> Size (in inches)     </Text>
                     <RNPickerSelect
                         placeholder={{}}
                         value={(this.state && this.state.value_id) || 1}
@@ -507,7 +448,7 @@ export default class CategoryDetails extends Component {
                           textInputProps={{underlineColorAndroid: 'grey'}}
                         />
 
-                    <Text style={styles.size}>Quantity</Text>
+                    <Text style={styles.size}> Quantity (in Feet) </Text>
                     <TextInput 
                     style={{marginTop:10}}
                     placeholder ="Enter Quantity" 

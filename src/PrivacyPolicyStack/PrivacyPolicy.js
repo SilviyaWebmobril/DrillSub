@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import {View,Text,StyleSheet,TouchableOpacity,Image} from 'react-native';
+import {View,Text,StyleSheet,TouchableOpacity,Image,ActivityIndicator} from 'react-native';
 import HomeHOC from '../HOC/HomeHOC';
 import ApiUrl from '../Utility/ApiUrl';
 import { WebView } from 'react-native-webview';
@@ -14,7 +14,8 @@ export default  class PrivacyPolicy extends Component {
             alignSelf: 'center',
             textAlign: 'center',
             fontSize: 15,
-            fontWeight:"bold"
+            fontWeight:"bold",
+
            
         },
         headerTitleStyle: {
@@ -38,15 +39,36 @@ export default  class PrivacyPolicy extends Component {
      
     });
 
+    state = {
+        visible:true
+    }
+
+    hideSpinner() {
+        this.setState({ visible: false });
+      }
+
 
     render(){
         return(
-           
-            <WebView
+           <View style={{flex:1}}>
+                <WebView
+                    onLoad={() => this.hideSpinner()}
                     source={{ uri: "https://webmobril.org/dev/drillsub/api/Mobileapi/privacyPolicy" }}
                     style={{ marginTop: 10 }}
                    
                 />
+                {this.state.visible && (
+                   <View
+                    style={[
+                    StyleSheet.absoluteFill,
+                    { backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center' }
+                    ]}
+                    >
+                        <ActivityIndicator size="large" />
+                    </View>
+                )}
+           </View>
+           
             
         )
     }

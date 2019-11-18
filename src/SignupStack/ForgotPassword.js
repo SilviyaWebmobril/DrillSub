@@ -38,7 +38,7 @@ class ForgotPassword extends Component {
                        
                         Alert.alert(
                             'Forgot Password',
-                            "his Email is not registered with us.",
+                            "This Email is not registered with us.",
                             [
                         
                             {text: 'OK', onPress: () => {}},
