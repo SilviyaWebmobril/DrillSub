@@ -16,7 +16,8 @@ import ContactUs from '../ContactUsStack/ContactUs';
 import CategoryDetails from '../HomeStack/CategoryDetails';
 import SavedItem from '../SavedItemsStack/SavedItem';
 import EditUserDetails from '../EditDetailsStack/EditUserDetails';
-import PrivacyPolicy from '../PrivacyPolicyStack/PrivacyPolicy'
+import PrivacyPolicy from '../PrivacyPolicyStack/PrivacyPolicy';
+import FinalEstimate from '../SavedItemsStack/FinalEstimate';
 
 const PrivacyPolicyStack = createStackNavigator({
 
@@ -32,6 +33,9 @@ const SavedItemStack =  createStackNavigator({
     },
     CategoryDetails:{
         screen:CategoryDetails
+    },
+    FinalEstimate:{
+        screen:FinalEstimate
     }
 })
 

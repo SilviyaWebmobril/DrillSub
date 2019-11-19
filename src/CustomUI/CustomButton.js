@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     btnStyle:{
         width:"80%",
-        height:"30%",
+        height:100,
         alignSelf:"center",
         flex:1,
         marginTop:20,

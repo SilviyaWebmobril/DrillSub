@@ -32,5 +32,9 @@ export default {
 
     updateProfile:"updateProfile",
     
-    change_password : "changePassword"
+    change_password : "changePassword",
+
+    total_price_estimation : "total_price_estimation",
+    
+    submit_final_estimate:"sendemailConfirmation",
 }

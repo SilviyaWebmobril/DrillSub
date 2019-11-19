@@ -2,6 +2,7 @@ import React ,{Component} from 'react';
 import {View ,StyleSheet,Text,TouchableOpacity } from 'react-native';
 import Colors from '../Utility/Colors';
 import { withNavigation } from 'react-navigation';
+import { CheckBox } from 'react-native-elements';
 
 class SavedSingleItem extends Component {
 
@@ -31,6 +32,14 @@ class SavedSingleItem extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.viewRow1}>
+                    
+                <CheckBox
+                   
+                    checked={this.props.data.final_check}
+                    onPress={()=>{this.props.checkFinal(this.props.data.id)}}
+                    containerStyle={{backgroundColor:'transparent',borderColor:"transparent",}} 
+                    />
+
                     <Text style={styles.subHeading1}>Size :{this.props.data.size}''</Text>
                     <Text style={styles.subHeading2}>Qunantity :{this.props.data.quantity}</Text>
                     <Text style={styles.subHeading3}>Price : ${this.props.data.total_price}</Text>
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
     subHeading1:{
         fontSize:12,
         flex:1,
-        marginTop:5,
+        marginTop:20,
        alignSelf:"flex-start",
        marginBottom:10,
        color:"grey"
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
     subHeading2:{
         fontSize:12,
         flex:1,
-        marginTop:5,
+        marginTop:20,
        textAlign:'center',
        color:"grey"
       
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
     subHeading3:{
         fontSize:12,
         flex:1,
-        marginTop:5,
+        marginTop:20,
         color:"grey",
         textAlign:'right'
       

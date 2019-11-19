@@ -49,6 +49,8 @@ target 'DrillSub' do
 
   pod 'react-native-html-to-pdf', :path => '../node_modules/react-native-html-to-pdf'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'DrillSubTests' do
     inherit! :search_paths
     # Pods for testing

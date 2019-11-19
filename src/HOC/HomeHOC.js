@@ -3,6 +3,7 @@ import {View,StyleSheet, Text,Image,ScrollView,TouchableOpacity,Dimensions,Activ
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import CustomAlert from '../CustomUI/CustomAlert';
 import Colors from '../Utility/Colors';
+import CustomButton from '../CustomUI/CustomButton';
 const HomeHOC = (WrappedComponent, params) => {
 
     class HOC extends Component {
@@ -58,7 +59,17 @@ const HomeHOC = (WrappedComponent, params) => {
         render(){
             return(
                     <View  style={styles.container}>
-                         
+
+                      {/* {params.saved_item == 1 
+                      ?
+                      <View style={{flexDirection:"row",justifyContent:"space-between",justifyContent:"space-between",height:null}}>
+                        <Text style={{fontSize:15,fontWeight:"bold",margin:10,flex:2}}>Please select the rows for final estimation.</Text>
+                        <CustomButton text="Submit" onPressHandler={params.submit} btn_style={{alignSelf:"flex-start",marginTop:10,height:50,width:"40%"}}/>
+                      </View>
+                      :
+                      <View/>
+                      }
+                          */}
                         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
                             <View >
