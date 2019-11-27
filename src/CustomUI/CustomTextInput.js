@@ -55,7 +55,14 @@ export class CustomTextInput extends Component {
                     validationRules:{
                         isText:true
                     }
-                }
+                },
+                mobile:{
+                    value: "",
+                    valid:false,
+                    validationRules:{
+                        isMobile:10,
+                    }
+                },
             }
         }
     }
@@ -108,6 +115,15 @@ export class CustomTextInput extends Component {
 
 
                 if(!this.state.controls.confirm_password.valid){
+                    this.setState({errorState:false});
+                   
+                }else{
+                    this.setState({errorState:true});
+                }
+
+            }else if(type == 'mobile'){
+
+                if(!this.state.controls.mobile.valid){
                     this.setState({errorState:false});
                    
                 }else{
@@ -182,6 +198,15 @@ export class CustomTextInput extends Component {
                 }
                
     
+            }else if(type == "mobile"){
+
+                if(this.state.controls.mobile.valid){
+                    return this.state.controls.mobile.value;
+                }else{
+                    return "invalid";
+                }
+               
+    
             }
         
 
@@ -226,7 +251,7 @@ export class CustomTextInput extends Component {
     render(){
       
         return(
-            <View style={styles.container}>
+            <View style={[styles.container,this.props.cont]}>
                 <View style={{flexDirection:"column"}}>
                     <Text style={[styles.fieldText,this.props.field_text]}>{this.props.text}</Text>
                     <View style={styles.viewRow}>
@@ -240,6 +265,7 @@ export class CustomTextInput extends Component {
                             returnKeyType={this.props.returnKeyType}
                             multiline={this.props.multiline}
                             editable={this.props.editable}
+                            keyboardType={this.props.keyboardType}
                             numberOfLines={this.props.numberOfLines}
                             />
                         {this.state.isSecure

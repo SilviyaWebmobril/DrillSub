@@ -76,7 +76,19 @@ class Home  extends Component {
 
     renderItem(data){
         let { item, index } = data;
-       
+        console.log("id-->",item.id);
+       if(item.id ==  6){
+
+        return(
+            <TouchableOpacity
+            onPress={()=> this.props.navigation.navigate('SendDetails',{id:item.id , name : item.category_name,update:0})}>
+                <CategoryItem data={item} />
+            </TouchableOpacity>
+           
+        );
+
+       }else{
+
         return(
             <TouchableOpacity
             onPress={()=> this.props.navigation.navigate('CategoryDetails',{id:item.id , name : item.category_name,update:0})}>
@@ -84,6 +96,8 @@ class Home  extends Component {
             </TouchableOpacity>
            
         );
+       }
+       
     }
 
     

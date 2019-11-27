@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 class SignIn extends Component {
 
+    
+
     constructor(props){
         super(props);
         this.state ={
@@ -157,9 +159,14 @@ class SignIn extends Component {
                 <View style={styles.viewColumn}>
                     <Text style={{fontWeight:"bold",color:"grey"}}>By clicking 'Sign In' you agree  to the </Text>
                     <View style={styles.viewRow}>
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('TermsOfUse')}}>
                         <Text style={styles.textTerms}>Terms of Use </Text>
+                        </TouchableOpacity>
+                       
                         <Text style={{fontWeight:"bold",color:"grey"}}> and </Text>
-                        <Text style={styles.textTerms}> Privacy Policy</Text>
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('PrivacyPolicy',{login:0})}}>
+                        <Text style={styles.textTerms}> Standard Conditions</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 

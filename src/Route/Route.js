@@ -18,6 +18,10 @@ import SavedItem from '../SavedItemsStack/SavedItem';
 import EditUserDetails from '../EditDetailsStack/EditUserDetails';
 import PrivacyPolicy from '../PrivacyPolicyStack/PrivacyPolicy';
 import FinalEstimate from '../SavedItemsStack/FinalEstimate';
+import SendDetails from '../HomeStack/SendDetails';
+import TermsOfUse from '../TermsOfUseStack/TermsOfUse';
+
+
 
 const PrivacyPolicyStack = createStackNavigator({
 
@@ -52,6 +56,9 @@ const  homeStack = createStackNavigator({
     },
     CategoryDetails:{
         screen:CategoryDetails
+    },
+    SendDetails:{
+        screen:SendDetails
     }
    
     
@@ -95,8 +102,8 @@ const drawerNavigator  = createDrawerNavigator({
     },
     PrivacyPolicyScreen :{
         screen:PrivacyPolicyStack
-    }
-
+    },
+   
 
     
 },{
@@ -106,19 +113,47 @@ const drawerNavigator  = createDrawerNavigator({
   
 
 const SignUpStack = createStackNavigator({
-    SignIn,
-    SignUp, 
-    ForgotPassword,
-    OTP,
-    ResetPassword
+    SignIn:{
+        screen:SignIn,
+        navigationOptions:{
+            header:null
+        }
+    },
+    SignUp:{
+        screen:SignUp,
+        navigationOptions:{
+            header:null
+        }
+    }, 
+    ForgotPassword:{
+        screen:ForgotPassword,
+        navigationOptions:{
+            header:null
+        }
+    },
+    OTP:{
+        screen:OTP,
+        navigationOptions:{
+            header:null
+        }
+    },
+    ResetPassword:{
+        screen:ResetPassword,
+        navigationOptions:{
+            header:null
+        }
+    },
+    PrivacyPolicy,
+    TermsOfUse,
+
 
 
 },{
     initialRouteName:"SignIn",
-    headerMode: 'none',
-    navigationOptions: {
-        headerVisible: false,
-    }
+    // headerMode: 'none',
+    // navigationOptions: {
+    //     headerVisible: false,
+    // }
    
 })
 

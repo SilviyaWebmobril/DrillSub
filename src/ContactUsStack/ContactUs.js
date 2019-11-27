@@ -128,10 +128,11 @@ class ContactUs  extends Component {
                 />
 
                 <CustomTextInput 
-                textAlignVertical="top"
+               
                 ref="message"
                 field_text={{marginLeft:40}}
-                text_input_width={{width:"80%"}}
+                text_input_width={{width:"80%",height:100,backgroundColor:"red",paddingTop: 0, textAlignVertical:"top",
+                paddingBottom: 0}}
                 placeholder="Enter Message"
                 text="MESSAGE"
                 inputType="message"

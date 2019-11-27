@@ -37,4 +37,6 @@ export default {
     total_price_estimation : "total_price_estimation",
     
     submit_final_estimate:"sendemailConfirmation",
+
+    remove_cart :"removecartData"
 }

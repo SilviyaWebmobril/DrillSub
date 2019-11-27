@@ -169,11 +169,11 @@ export default class  SideBar extends Component  {
                       
                             this.props.navigation.dispatch(resetAction);}}
                       >
-                        <Text style={styles.headingStyle}> Saved Items </Text>
+                        <Text style={styles.headingStyle}> Saved Estimates </Text>
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={() => {
                         
-                        this.props.navigation.navigate('PrivacyPolicyScreen')
+                        this.props.navigation.navigate('PrivacyPolicyScreen',{login:1})
                         const resetAction = StackActions.reset({
                             index: 0,
                             //key: 'PrivacyPolicy', // here there will be no key as 
@@ -185,7 +185,7 @@ export default class  SideBar extends Component  {
                   
                         this.props.navigation.dispatch(resetAction);
                         }}>
-                        <Text style={styles.headingStyle}> Privacy Policy </Text>
+                        <Text style={styles.headingStyle}> Standard Conditions </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                     onPress={()=>{

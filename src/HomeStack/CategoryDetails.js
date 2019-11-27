@@ -423,7 +423,7 @@ export default class CategoryDetails extends Component {
             <View style={{flex:1}}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
-                    <Text style={styles.size}> Size (in inches)     </Text>
+                    <Text style={styles.size}> Size (in Feet)     </Text>
                     <RNPickerSelect
                         placeholder={{}}
                         value={(this.state && this.state.value_id) || 1}
@@ -448,7 +448,7 @@ export default class CategoryDetails extends Component {
                           textInputProps={{underlineColorAndroid: 'grey'}}
                         />
 
-                    <Text style={styles.size}> Quantity (in Feet) </Text>
+                    <Text style={styles.size}> Quantity (Each) </Text>
                     <TextInput 
                     style={{marginTop:10}}
                     placeholder ="Enter Quantity" 

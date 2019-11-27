@@ -5,16 +5,15 @@ import { CustomTextInput } from '../CustomUI/CustomTextInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Axios from 'axios';
 import ApiUrl from '../Utility/ApiUrl';
-import FinalEstimateItem from './FinalEstimateItem';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-export default class FinalEstimate  extends Component {
+export default class SendDetails  extends Component {
 
 
     static navigationOptions = ({ navigation }) => ({
         
-        title:"Final Estimate",
+        title:"Send Details",
         headerTitleStyle: {
             color: 'black',
             alignSelf: 'center',
@@ -25,7 +24,7 @@ export default class FinalEstimate  extends Component {
         },
         headerLeft:(
             <TouchableOpacity
-              onPress={()=>{navigation.navigate("HomeScreen")}}
+              onPress={()=>{navigation.goBack()}}
             >
               <Image source={require('../../Assets/back-arrow.png')} style={{width:24,height:24,marginLeft:20}}/>
              
@@ -39,82 +38,45 @@ export default class FinalEstimate  extends Component {
         super(props);
         this.state = {
             loading:false,
-            saved_item:[],
-            total_amount:""
+            email:"",
+            name:""
         }
     }
 
-    componentDidMount(){
+    componentDidMount = async()=>{
 
-        var formdata = new FormData();
-        formdata.append("cart_id",this.props.navigation.getParam('final_check_box',""));
-         this.setState({loading:true});
+        const name = await AsyncStorage.getItem('name');
+        const email = await AsyncStorage.getItem('email');
+        this.refs.email.setTextInputValue(email,"email");
+        this.refs.name.setTextInputValue(name,"name");
  
-         Axios.post(ApiUrl.base_url + ApiUrl.total_price_estimation,formdata).then(response =>{
-             this.setState({loading:false});
-             if(response.data.status == "SUCCESS"){
- 
-                this.setState({saved_item:response.data.data.saved_item})
-                this.setState({total_amount:response.data.data.total_price.total})
- 
- 
-             }else{
- 
-                 Alert.alert(
-                     'Error',
-                     "Something went wrong! . Please try again later.",
-                     [
-                 
-                     {text: 'OK', onPress: () => {}},
-                     
-                     ], 
-                     { cancelable: false }
-                     )
-             }
- 
-         }).catch(error => {
- 
-             console.log("on error",error);
-             Alert.alert(
-                'Error',
-                "Check your Network Connection!",
-                [
-            
-                {text: 'OK', onPress: () => {}},
-                
-                ], 
-                { cancelable: false }
-                )
- 
-         });
-    }
-
-    renderItem = (data) =>{
-        let { item, index } = data;
         
-        return(
-          <FinalEstimateItem data={item} />
-        )
+       
+
+
     }
 
     submitHandler = async() => {
 
         this.setState({loading:true});
         const name = await AsyncStorage.getItem('name');
+        const email = await AsyncStorage.getItem('email');
+        const project_name = this.props.navigation.state.params.name;
+
+        console.log("monile == >", this.refs.address.getInputTextValue('message'));
 
        
-        if(this.refs.address.getInputTextValue('message') !== "invalid"){
+        if(this.refs.address.getInputTextValue('message') !== "invalid" ||  this.refs.mobile.getInputTextValue('mobile') !== "invalid"){
 
-            var formdata = new FormData();
-            formdata.append("address",this.refs.address.getInputTextValue('address'));
-            formdata.append("cart_id",this.props.navigation.getParam('final_check_box',""));
-            formdata.append("user_name", name);
-            Axios.post(ApiUrl.base_url+ApiUrl.submit_final_estimate,formdata).then(response=>{
+            Axios.get(`https://webmobril.org/dev/drillsub/api/Mobileapi/sendCategory_DetailwithAddress?project_name=${project_name}&user_name=${name}&user_email=${email}&user_mobile=${this.refs.mobile.getInputTextValue('mobile')}&project_address=${this.refs.address.getInputTextValue('address')}`).then(response=>{
                 this.setState({loading:false});
                 if(response.data.status == "SUCCESS"){
+
+                    this.refs.address.setTextInputValue("message");
+                    this.refs.mobile.resetTextInput("mobile");
     
                     Alert.alert(
-                        'Final Estimate',
+                        'Send Details',
                         ` ${response.data.message}`,
                         [
                     
@@ -125,7 +87,7 @@ export default class FinalEstimate  extends Component {
                         )
                 }else{
                     Alert.alert(
-                        'Final Estimate',
+                        'Send Details',
                         ` ${response.data.message}`,
                         [
                     
@@ -141,7 +103,7 @@ export default class FinalEstimate  extends Component {
                 this.setState({loading:false});
     
                 Alert.alert(
-                    'Final Estimate',
+                    'Send Details',
                     "Check Your Network Connection!",
                     [
                 
@@ -156,8 +118,8 @@ export default class FinalEstimate  extends Component {
         }else{
             this.setState({loading:false});
             Alert.alert(
-                'Final Estimate',
-                "Please Enter Address!",
+                'Send Details',
+                "Please Enter Address and mobile!",
                 [
             
                 {text: 'OK', onPress: () => {}},
@@ -178,27 +140,47 @@ export default class FinalEstimate  extends Component {
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                     <View style={{height:null,}}>
 
-                    <View style={styles.viewRow1}>
-                        <Text style={styles.subHeading4}>Project Name</Text>
-                        <Text style={styles.subHeading1}>Size </Text>
-                        <Text style={styles.subHeading2}>Qunantity </Text>
-                        <Text style={styles.subHeading3}>Price </Text>
-                    </View>
-                    <View style={styles.viewLine}></View>
+                        <View style={{marginTop:20,marginLeft:20}}>
+                            <Text style={{fontWeight:"bold",fontSize:15,color:"grey",marginBottom:5}}>Project Name </Text>
+                            <Text style={{fontWeight:"bold",fontSize:15}}>{this.props.navigation.state.params.name}</Text>
+                        </View>
 
-                    <FlatList
-                        data={this.state.saved_item}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={(item) =>this.renderItem(item)}
-                        style={{paddingBottom:10,marginTop:10}}
+                    <CustomTextInput 
+                        ref="name"
+                        cont={{marginTop:15}}
+                        field_text={{marginLeft:40}}
+                        image_name={require('../../Assets/name.png')} 
+                        image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
+                        placeholder="Enter Name"
+                        text="NAME"
+                        inputType="name"
+                        editable={false}
+                        error_text="Please Enter Name"
                         
                         />
+                        <CustomTextInput 
+                        ref="email"
+                        field_text={{marginLeft:40}}
+                        image_name={require('../../Assets/@.png')} 
+                        image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
+                        placeholder="Enter Email"
+                        text="EMAIL"
+                        inputType="email"
+                        editable={false}
+                        error_text="Please Enter Valid Email"
+                        />
 
-                        <View style={styles.viewRow1}>
-                            <Text style={{textAlign:'right',flex:3,fontWeight:"bold"}}>Total Amount : </Text>
-                            <Text style={{fontWeight:"bold"}}> $ {this.state.total_amount}</Text>
-
-                        </View>
+                        <CustomTextInput 
+                        ref="mobile"
+                        field_text={{marginLeft:40}}
+                        image_name={require('../../Assets/phone.png')} 
+                        image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
+                        placeholder="Enter Mobile"
+                        text="MOBILE"
+                        keyboardType="phone-pad"
+                        inputType="mobile"
+                        error_text="Please Enter Valid Mobile"
+                        />
 
                         <CustomTextInput 
                             ref="address"

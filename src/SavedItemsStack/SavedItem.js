@@ -13,7 +13,7 @@ export default class SavedItem extends Component {
 
     static navigationOptions = ({ navigation }) => ({
         
-        title:"Saved Items",
+        title:"Saved Estimates",
         headerTitleStyle: {
             color: 'black',
             alignSelf: 'center',

@@ -1,8 +1,10 @@
 import React ,{Component} from 'react';
-import {View ,StyleSheet,Text,TouchableOpacity } from 'react-native';
+import {View ,StyleSheet,Text,TouchableOpacity ,Alert} from 'react-native';
 import Colors from '../Utility/Colors';
 import { withNavigation } from 'react-navigation';
 import { CheckBox } from 'react-native-elements';
+import Axios from 'axios';
+import ApiUrl from '../Utility/ApiUrl';
 
 class SavedSingleItem extends Component {
 
@@ -19,6 +21,52 @@ class SavedSingleItem extends Component {
         this.props.onRefreshPage();
     }
 
+    removeHandler =(cartid) =>{
+
+        let formdata = {
+            cart_id :cartid
+        }
+        Axios.post(ApiUrl.base_url+ApiUrl.remove_cart,formdata).then(response => {
+
+            console.log("response =>",response);
+            if(response.data.status == 'SUCCESS'){
+
+                this.props.onRefreshPage();
+
+            }else{
+
+                Alert.alert(
+                    'Saved Item',
+                    "Something went wrong !Please try again later .",
+                    [
+                
+                    {text: 'OK', onPress: () => {}},
+                    
+                    ], 
+                    { cancelable: false }
+                    )
+    
+                
+            }
+            
+        }).catch(error =>{
+
+            console.log("error",error);
+            Alert.alert(
+                'Saved Item',
+                "Check Your Network Connection .! And try again later .",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+
+        });
+    }
+
     render(){
         return(
             <View style={styles.container}>
@@ -28,6 +76,12 @@ class SavedSingleItem extends Component {
                     onPress={()=>{this.editHandler(this.props.data.id ,this.props.data.categoty_id,this.props.data.category_name,this.props.data.size, this.props.data.quantity,this.props.data.total_price)}}>
                         <View >
                             <Text style={styles.editStyle}>Edit</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>{this.removeHandler(this.props.data.id ,this.props.data.categoty_id,this.props.data.category_name,this.props.data.size, this.props.data.quantity,this.props.data.total_price)}}>
+                        <View >
+                            <Text style={styles.editStyle}>Remove</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -75,14 +129,14 @@ const styles = StyleSheet.create({
     },
     editStyle:{
         color:Colors.yellow_theme,
-        flex:1,
+        flex:1.5,
         marginLeft:5
     },
     headStyle:{
         fontWeight:"700",
         fontSize:15,
         marginBottom:5,
-        flex:9
+        flex:7
 
     },
     subHeading1:{
