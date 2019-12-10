@@ -19,32 +19,89 @@ class SignIn extends Component {
     constructor(props){
         super(props);
         this.state ={
-            isSec :true
+            isSec :true,
+            disabled :false
         }
     }
 
     submitSignIn = () =>{
 
-        console.log(this.refs.password.getInputTextValue('password'));
-       
-        if(this.refs.email.getInputTextValue('email') !== "invalid" && this.refs.password.getInputTextValue('password') !== "invalid"){
+        if(this.refs.email.getInputTextValue('email') == 0){
 
-            if(this.refs.password.getInputTextValue('password') == "invalid"){
-
-               
-                Alert.alert(
-                    'Sign In Error',
-                    "Password Length must be greater than or equal to 6",
-                    [
-                
-                    {text: 'OK', onPress: () => {}},
-                    
-                    ], 
-                    { cancelable: false }
-                    )
-                return;
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Email !",
+                [
             
-            }
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+
+        }else if(this.refs.email.getInputTextValue('email') == "invalid"){
+
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Valid Email !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+            
+        }
+
+       
+        if(this.refs.password.getInputTextValue('password') ==  0){
+
+
+            Alert.alert(
+                'Sign Up',
+                "Password must not be Blank!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+        
+
+
+        }else if(this.refs.password.getInputTextValue('password') == 1){
+
+
+            Alert.alert(
+                'Sign Up',
+                "Password Length should be minimum of 6 characters !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+        
+
+
+
+        }
+
+       
+       
+      //  if(this.refs.email.getInputTextValue('email') !== "invalid" || this.refs.password.getInputTextValue('password') !== "invalid"){
+
+         
+            this.setState({disabled:true})
             this.props.load(true);
             var formdata  ={
                
@@ -55,6 +112,7 @@ class SignIn extends Component {
           
             Axios.post(ApiUrl.base_url +  ApiUrl.login,formdata).then(response => {
                 this.props.load(false);
+                this.setState({disabled:false})
                    
     
                     if(response.data.status == "SUCCESS"){
@@ -73,9 +131,10 @@ class SignIn extends Component {
     
                     }else{
                       
+                      
 
                         Alert.alert(
-                            'Sign In Error',
+                            'Sign In',
                             "Invalid Email or Password",
                             [
                         
@@ -90,10 +149,11 @@ class SignIn extends Component {
                 }
             ).catch(error=>{
                 this.props.load(false);
-                console.log("error",error);
+                
+                this.setState({disabled:false})
                 
                 Alert.alert(
-                    'Sign In Error',
+                    'Sign In',
                     "Check Your Network Connection .! And try again later .",
                     [
                 
@@ -103,21 +163,7 @@ class SignIn extends Component {
                     { cancelable: false }
                     )
             });
-           }else{
            
-            Alert.alert(
-                'Sign In Error',
-                "All fields are Required",
-                [
-            
-                {text: 'OK', onPress: () => {}},
-                
-                ], 
-                { cancelable: false }
-                )
-        }
-            
-    
     
     }
 
@@ -135,6 +181,7 @@ class SignIn extends Component {
                 image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
                 placeholder="Enter Email"
                 text="EMAIL"
+                keyboardType="email-address"
                 inputType="email"
                 error_text="Please Enter Valid Email"
                 />
@@ -153,7 +200,9 @@ class SignIn extends Component {
                 error_text="Password must be greater than 6"
                 />
                 <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('ForgotPassword')}>
+                        onPress={()=>{this.refs.email.resetTextInput('email');
+                        this.refs.password.resetTextInput('password');
+                        this.props.navigation.navigate('ForgotPassword')}}>
                         <Text style={styles.forgotPassword}> Forgot Password?</Text>
                     </TouchableOpacity>
                 <View style={styles.viewColumn}>
@@ -170,7 +219,7 @@ class SignIn extends Component {
                     </View>
                 </View>
 
-                <CustomButton text="Sign In" onPressHandler={()=>{this.submitSignIn()}}/>
+                <CustomButton text="Sign In" onPressHandler={()=>{this.submitSignIn()}} disabled={this.state.disabled}/>
                
                 <View style={styles.viewRow1}>
                     <Text style={{fontWeight:"bold",color:"grey"}}> Don't have an account? </Text>
@@ -202,7 +251,7 @@ const styles= StyleSheet.create({
     viewColumn:{
         flexDirection:"column",
         alignSelf:'center',
-        marginTop:20,
+        marginTop:10,
         flex:1,
       
     },
@@ -214,7 +263,7 @@ const styles= StyleSheet.create({
     viewRow1:{
         flexDirection:"row",
         alignSelf:"center",
-        marginTop:30,
+        marginTop:20,
         flex:1
         
     },
@@ -231,7 +280,7 @@ const styles= StyleSheet.create({
         marginRight:10,
         fontSize:12,
         fontWeight:"bold",
-        textDecorationLine: 'underline',
+       // textDecorationLine: 'underline',
     }
     
 })

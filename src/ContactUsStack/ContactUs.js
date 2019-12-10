@@ -6,14 +6,21 @@ import CustomButton from '../CustomUI/CustomButton';
 import Colors from '../Utility/Colors';
 import Axios from 'axios';
 import ApiUrl from '../Utility/ApiUrl';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 class ContactUs  extends Component {
 
 
+    state={
+        subject:"",
+        message:"",
+    }
+
+
     submitHandler = async() => {
 
-        if(this.refs.subject.getInputTextValue("subject") !== "invalid" && this.refs.message.getInputTextValue("message") !== "invalid"){
+        if(this.state.subject !== "" && this.state.message !== ""){
 
             try {
                 this.props.load(true);
@@ -23,8 +30,8 @@ class ContactUs  extends Component {
     
                     var formdata = {
                         "user_id" : JSON.parse(value),
-                        "subject" :this.refs.subject.getInputTextValue("subject"),
-                        "message" : this.refs.message.getInputTextValue("message")
+                        "subject" :this.state.subject,
+                        "message" : this.state.message
             
                     }
     
@@ -35,12 +42,15 @@ class ContactUs  extends Component {
                         console.log("response  == >" ,response.data.status);
                         if(response.data.status == "SUCCESS"){
     
-                            this.refs.subject.setTextInputValue("","subject");
-                            this.refs.message.setTextInputValue("","message");
+                            // this.refs.subject.setTextInputValue("","subject");
+                            // this.refs.message.setTextInputValue("","message");
+
+                            this.setState({subject:""});
+                            this.setState({message:""});
                          
                               Alert.alert(
                                 'Contact Us',
-                                "Your Message has been sent to the Admin and will contact you soon!",
+                                "Your message has been sent to the Admin and will contact you soon!",
                                 [
                             
                                 {text: 'OK', onPress: () => { this.props.navigation.navigate("HomeScreen")}},
@@ -55,8 +65,8 @@ class ContactUs  extends Component {
                             
     
                             Alert.alert(
-                                'Contact Us Error',
-                                "Some Error Occured .Please try again later",
+                                'Contact Us',
+                                "Some error occured .Please try again later",
                                 [
                             
                                 {text: 'OK', onPress: () => { }},
@@ -71,7 +81,7 @@ class ContactUs  extends Component {
     
                         Alert.alert(
                             'Contact Us',
-                            "Check Your Network Connection .! And try again later .",
+                            "Check Your Network Connection ! And try again later .",
                             [
                         
                             {text: 'OK', onPress: () => {}},
@@ -112,14 +122,13 @@ class ContactUs  extends Component {
 
     render() {
         return(
-            <View style={{flex: 2 ,justifyContent:"center", height :null}}>
+            <View style={{flex:2,justifyContent:"center", height :null}}>
 
-               
-
-                <CustomTextInput 
+                
+                {/* <CustomTextInput 
                 ref="subject"
-                field_text={{marginLeft:40}}
-                text_input_width={{width:"80%"}}
+                field_text={{marginLeft:20}}
+                
                 placeholder="Enter Subject"
                 text="SUBJECT"
                 inputType="subject"
@@ -130,8 +139,8 @@ class ContactUs  extends Component {
                 <CustomTextInput 
                
                 ref="message"
-                field_text={{marginLeft:40}}
-                text_input_width={{width:"80%",height:100,backgroundColor:"red",paddingTop: 0, textAlignVertical:"top",
+                field_text={{marginLeft:20}}
+                text_input_width={{height:100,paddingTop: 0, textAlignVertical:"top",
                 paddingBottom: 0}}
                 placeholder="Enter Message"
                 text="MESSAGE"
@@ -140,7 +149,25 @@ class ContactUs  extends Component {
                 secureTextEntry={false}
                
                 error_text="Please Enter Message"
-                />
+                /> */}
+
+                <TextInput 
+                    placeholder="Subject"
+                    onChangeText ={(value)=>{this.setState({subject:value})}} 
+                    style={{marginTop:20,marginBottom:20,marginLeft:5}}
+                    value={this.state.subject}/>
+                    
+                    <View style={styles.viewLine}></View>
+                    {/* //borderRadius:15,borderColor:'#808080',borderWidth:1, */}
+
+                <TextInput 
+                    placeholder="Messsage"
+                    style={{height:100,paddingTop: 0, textAlignVertical:"top",
+                    paddingBottom: 0,paddingTop:10,marginLeft:5}}
+                    onChangeText ={(value)=>{this.setState({message:value})}} 
+                    value={this.state.message}/>
+
+                    <View style={styles.viewLine}></View>
 
                 <CustomButton  text="Submit"  onPressHandler={()=>{this.submitHandler()}}/>
                   
@@ -151,3 +178,10 @@ class ContactUs  extends Component {
 }
 
 export default HomeHOC(ContactUs,{title :"Contact Us",header_color:"white", image_name :require('../../Assets/back-arrow.png') ,hamburger:false });
+
+const styles = StyleSheet.create({
+
+    viewLine:{
+        width:"100%",backgroundColor:"grey",height:1,marginTop:5,marginBottom:10,marginLeft:8,marginRight:8
+    }
+})

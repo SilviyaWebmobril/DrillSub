@@ -15,20 +15,102 @@ class SignUp extends Component {
     constructor(props){
         super(props);
         this.state ={
-            isSec :true
+            isSec :true,
+            disabled:false,
         }
     }
 
     submitSignUp(){
 
-        if(this.refs.password.getInputTextValue('password') == "invalid"){
+        if(this.refs.name.getInputTextValue('name') == "invalid"){
 
-            alert("Password Length must be greater than or equal to 6");
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Name !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+
+        }
+
+        if(this.refs.email.getInputTextValue('email') == 0){
+
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Email !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+
+        }else if(this.refs.email.getInputTextValue('email') == "invalid"){
+
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Valid Email !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+            
+        }
+
+       
+        if(this.refs.password.getInputTextValue('password') ==  0){
+
+
+            Alert.alert(
+                'Sign Up',
+                "Password must not be Blank!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
             return;
         
+
+
+        }else if(this.refs.password.getInputTextValue('password') == 1){
+
+
+            Alert.alert(
+                'Sign Up',
+                "Password Length should be minimum of 6 characters !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+        
+
+
+
         }
-       
-       if(this.refs.name.getInputTextValue('name') !== "invalid" && this.refs.email.getInputTextValue('email') !== "invalid" || this.refs.name.getInputTextValue('password') !== "invalid"){
+
+
+        this.setState({disabled:true})   
         this.props.load(true);
         var formdata  ={
             "name" :this.refs.name.getInputTextValue('name'),
@@ -40,7 +122,7 @@ class SignUp extends Component {
         
         Axios.post(ApiUrl.base_url +  ApiUrl.signup,formdata).then(response => {
             this.props.load(false);
-               
+            this.setState({disabled:false})
 
                 if(response.data.status == "SUCCESS"){
 
@@ -56,7 +138,7 @@ class SignUp extends Component {
                    
                     Alert.alert(
                         'Sign Up',
-                        "User Regisstered Successfully",
+                        "User Registered Successfully",
                         [
                     
                         {text: 'OK', onPress: () => {}},
@@ -67,6 +149,7 @@ class SignUp extends Component {
 
 
                 }else{
+                   
                    
                     Alert.alert(
                         'Sign Up',
@@ -83,11 +166,13 @@ class SignUp extends Component {
 
             }
         ).catch(error=>{
+            this.setState({disabled:false})
             this.props.load(false);
+
             
            
             Alert.alert(
-                'Sign Up Error',
+                'Sign Up',
                 "Check Your Network Connection .! And try again later .",
                 [
             
@@ -97,22 +182,7 @@ class SignUp extends Component {
                 { cancelable: false }
                 )
         });
-       }else{
-       
-        Alert.alert(
-            'Sign Up Error',
-            "All fields are Required",
-            [
-        
-            {text: 'OK', onPress: () => {}},
-            
-            ], 
-            { cancelable: false }
-            )
-        }
-        
-
-
+    
     }
 
 
@@ -140,6 +210,7 @@ class SignUp extends Component {
                 image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
                 placeholder="Enter Email"
                 text="EMAIL"
+                keyboardType="email-address"
                 inputType="email"
                 error_text="Please Enter Valid Email"
                 />
@@ -171,7 +242,7 @@ class SignUp extends Component {
                     </View>
                 </View>
 
-                <CustomButton text="Sign Up" onPressHandler={()=>{this.submitSignUp()}}/>
+                <CustomButton text="Sign Up" onPressHandler={()=>{this.submitSignUp()}} disabled={this.state.disabled}/>
                
                 <View style={styles.viewRow1}>
                     <Text style={{fontWeight:"bold",color:"grey"}}> Have an account? </Text>

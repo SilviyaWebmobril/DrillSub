@@ -82,7 +82,7 @@ class EditUserDetails extends Component {
         };
 
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
+           // console.log('Response = ', response);
            
             if (response.didCancel) {
               console.log('User cancelled image picker');
@@ -95,6 +95,7 @@ class EditUserDetails extends Component {
            
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+              console.log("file name=>",response.fileName);
               this.setState({fileName:response.fileName})
               this.setState({storeprofile:false})
               this.setState({photoSource:source.uri})
@@ -269,22 +270,23 @@ const styles  = StyleSheet.create({
         marginTop:20,
         marginRight:40,
         marginLeft:40,
-        alignSelf:"center"
+        alignSelf:"center",
+        borderColor:'black'
 
     },
     crossButton:{
         width:20,
         height:20,
-        marginTop:20,
-        marginRight:20,
-        alignSelf:"flex-end"
+        // marginTop:20,
+        // marginRight:20,
+        alignSelf:"center"
     },
 
     backgroundContainer: {
         position: 'absolute',
-        top: 10,
+        top: 40,
         bottom: 0,
-        left: 0,
-        right: 80,
+        left: 120,
+        right: 0,
       },
 })

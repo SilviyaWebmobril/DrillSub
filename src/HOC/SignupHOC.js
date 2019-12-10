@@ -26,14 +26,14 @@ const SignUpHOC = (WrappedComponent) => {
           }
 
           showAlert = (value) => {
-            console.log("value",value);
+            
             this.setState({showalert:value})   
           }
   
         render(){
         
             return(
-                    <View>
+                    <View style={{flex:1,height:"100%"}}>
                          
                         <KeyboardAwareScrollView style={styles.container}>
 
@@ -113,10 +113,11 @@ const styles = StyleSheet.create({
     imageContainer:{
        // zIndex: -1,
     //    width:Dimensions.get("window").width,
-    //    height:Dimensions.get("window").height,
+      //  height:Dimensions.get("window").height,
         flex:1,
+        
         paddingTop:100,
-        paddingBottom: DeviceInfo.isTablet() ? 350 : 200,
+        paddingBottom: DeviceInfo.isTablet() ? 350 : 300,
         paddingRight:20,
         paddingLeft:20
         

@@ -58,21 +58,75 @@ export default class SendDetails  extends Component {
 
     submitHandler = async() => {
 
-        this.setState({loading:true});
+       
         const name = await AsyncStorage.getItem('name');
         const email = await AsyncStorage.getItem('email');
         const project_name = this.props.navigation.state.params.name;
 
-        console.log("monile == >", this.refs.address.getInputTextValue('message'));
+        console.log("monile == >", this.refs.mobile.getInputTextValue('mobile'));
+
+        if(this.refs.mobile.getInputTextValue('mobile') == 0){
+
+            Alert.alert(
+                'Send Details',
+                "Please Enter Mobile!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+                return;
+
+        }else if(this.refs.mobile.getInputTextValue('mobile') == "invalid"){
+
+            Alert.alert(
+                'Send Details',
+                "Please Enter Valid Mobile!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+                return;
+
+        }
+
+
+        if(this.refs.address.getInputTextValue('message') == "invalid"){
+
+            Alert.alert(
+                'Send Details',
+                "Please Enter Address!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+                return;
+
+        }
+
+       
 
        
         if(this.refs.address.getInputTextValue('message') !== "invalid" ||  this.refs.mobile.getInputTextValue('mobile') !== "invalid"){
+            this.setState({loading:true});
+            
 
-            Axios.get(`https://webmobril.org/dev/drillsub/api/Mobileapi/sendCategory_DetailwithAddress?project_name=${project_name}&user_name=${name}&user_email=${email}&user_mobile=${this.refs.mobile.getInputTextValue('mobile')}&project_address=${this.refs.address.getInputTextValue('address')}`).then(response=>{
+            Axios.get(`https://webmobril.org/dev/drillsub/api/Mobileapi/sendCategory_DetailwithAddress?project_name=${project_name}&user_name=${name}&user_email=${email}&user_mobile=${this.refs.mobile.getInputTextValue('mobile')}&project_address=${this.refs.address.getInputTextValue('message')}`).then(response=>{
                 this.setState({loading:false});
                 if(response.data.status == "SUCCESS"){
 
-                    this.refs.address.setTextInputValue("message");
+                    this.refs.address.setTextInputValue('',"message");
                     this.refs.mobile.resetTextInput("mobile");
     
                     Alert.alert(
@@ -166,6 +220,7 @@ export default class SendDetails  extends Component {
                         placeholder="Enter Email"
                         text="EMAIL"
                         inputType="email"
+                        keyboardType="email-address"
                         editable={false}
                         error_text="Please Enter Valid Email"
                         />
@@ -177,7 +232,7 @@ export default class SendDetails  extends Component {
                         image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
                         placeholder="Enter Mobile"
                         text="MOBILE"
-                        keyboardType="phone-pad"
+                        keyboardType="number-pad"
                         inputType="mobile"
                         error_text="Please Enter Valid Mobile"
                         />

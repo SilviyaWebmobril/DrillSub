@@ -61,9 +61,9 @@ class ChangePassword  extends Component {
                 if(response.data.status == "SUCCESS"){
     
                     this.refs.email.setTextInputValue(this.state.email,"email");
-                    this.refs.password.setTextInputValue("","password");
-                    this.refs.old_password.setTextInputValue("","password");
-                    this.refs.confirm_password.setTextInputValue("","confirm_password");
+                    this.refs.password.resetTextInput("password");
+                    this.refs.old_password.resetTextInput("password");
+                    this.refs.confirm_password.resetTextInput("confirm_password");
 
                     Alert.alert(
                         'Change Password',

@@ -24,7 +24,7 @@ class Home  extends Component {
         this.props.load(true);
         Axios.get(ApiUrl.base_url + ApiUrl.banner_api).then(response => {
 
-            
+           
             this.props.load(false);
             if(response.data.status == "SUCCESS"){
                 
@@ -34,7 +34,8 @@ class Home  extends Component {
             
 
         }).catch(error => {
-            
+
+          
             this.props.load(false);
             Alert.alert(
                 'Network Error',
@@ -53,6 +54,8 @@ class Home  extends Component {
         Axios.get(ApiUrl.base_url + ApiUrl.fetch_category).then(response => {
 
             this.props.load(false);
+            console.log("response =>",response.data.data);
+            
            if(response.data.status == "SUCCESS"){
             this.setState({categoryData:response.data.data});
            }
@@ -76,12 +79,12 @@ class Home  extends Component {
 
     renderItem(data){
         let { item, index } = data;
-        console.log("id-->",item.id);
+       
        if(item.id ==  6){
 
         return(
             <TouchableOpacity
-            onPress={()=> this.props.navigation.navigate('SendDetails',{id:item.id , name : item.category_name,update:0})}>
+            onPress={()=> this.props.navigation.navigate('SendDetails',{id:item.id , name : item.category_name,update:0,diameter_unit:item.diameter_unit,quantity_unit:item.quantity_unit})}>
                 <CategoryItem data={item} />
             </TouchableOpacity>
            
@@ -91,7 +94,7 @@ class Home  extends Component {
 
         return(
             <TouchableOpacity
-            onPress={()=> this.props.navigation.navigate('CategoryDetails',{id:item.id , name : item.category_name,update:0})}>
+            onPress={()=> this.props.navigation.navigate('CategoryDetails',{id:item.id , name : item.category_name,update:0,diameter_unit:item.diameter_unit,quantity_unit:item.quantity_unit})}>
                 <CategoryItem data={item} />
             </TouchableOpacity>
            

@@ -60,16 +60,7 @@ const HomeHOC = (WrappedComponent, params) => {
             return(
                     <View  style={styles.container}>
 
-                      {/* {params.saved_item == 1 
-                      ?
-                      <View style={{flexDirection:"row",justifyContent:"space-between",justifyContent:"space-between",height:null}}>
-                        <Text style={{fontSize:15,fontWeight:"bold",margin:10,flex:2}}>Please select the rows for final estimation.</Text>
-                        <CustomButton text="Submit" onPressHandler={params.submit} btn_style={{alignSelf:"flex-start",marginTop:10,height:50,width:"40%"}}/>
-                      </View>
-                      :
-                      <View/>
-                      }
-                          */}
+                    
                         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
                             <View >

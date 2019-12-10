@@ -67,10 +67,12 @@ export default class SavedItem extends Component {
                });
 
                 this.setState({saved_item:new_response},()=>{
-                    console.log("savedd_ite data",this.state.saved_item);
+                   
                 });
                 
             }else{
+
+                this.setState({saved_item:[]})
 
                 this.setState({dataNotFound:true},()=>{
 
@@ -84,7 +86,7 @@ export default class SavedItem extends Component {
             this.setState({loading:false});
             console.log("error",error)
            Alert.alert(
-                'Saved Item',
+                'Saved Estimate',
                 "Check Your Network Connection .! And try again later .",
                 [
             
@@ -99,7 +101,7 @@ export default class SavedItem extends Component {
 
     renderItem = (data) =>{
         let { item, index } = data;
-        
+       
         return(
            <SavedSingleItem data={item} onRefreshPage={()=>this.onRefreshPage()} checkFinal={this.checkFinal}/>
         )
@@ -168,14 +170,33 @@ export default class SavedItem extends Component {
 
     onRefreshPage= () =>{
 
+        console.log("onRefreshPage ...");
+
         this.componentDidMount();
     }
 
     submit= () =>{
         console.log("submitted...");
-        this.props.navigation.navigate("FinalEstimate",{final_check_box:this.state.final_checkbox_for_estimation});
+
+        if(this.state.final_checkbox_for_estimation !== ""){
+
+            this.props.navigation.navigate("FinalEstimate",{final_check_box:this.state.final_checkbox_for_estimation});
 
 
+        }else{
+
+            Alert.alert(
+                'Saved Estimate',
+                "Please Select Estimates for Final Estimation!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+        }
+       
       
     }
 
@@ -183,10 +204,16 @@ export default class SavedItem extends Component {
     render(){
         return(
             <View style={styles.container}>
+                    {this.state.saved_item.length > 0 
+                    ?
                     <View style={{flexDirection:"row",justifyContent:"space-between",justifyContent:"space-between",height:null}}>
-                        <Text style={{fontSize:15,fontWeight:"bold",margin:10,flex:2}}>Please select the rows for final estimation.</Text>
+                        <Text style={{fontSize:15,fontWeight:"bold",marginTop:20,marginBottom:10,marginRight:5,flex:2}}>Please select the rows for final estimation.</Text>
                         <CustomButton text="Submit" onPressHandler={()=>{this.submit()}} btn_style={{alignSelf:"flex-start",marginTop:10,height:50,width:"40%"}}/>
                     </View>
+                    :
+                        <View/>
+                    }
+                 
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 
 

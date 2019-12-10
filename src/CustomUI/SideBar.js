@@ -5,6 +5,7 @@ import Colors from '../Utility/Colors';
 import { StackActions, NavigationActions} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import ApiUrl from '../Utility/ApiUrl';
+import FastImage from 'react-native-fast-image';
 
 
 const widthD = Dimensions.get("window").width;
@@ -26,22 +27,24 @@ export default class  SideBar extends Component  {
        
       setInterval(()=>{
 
-        console.log("in every two seconds");
+      
         this.getUserEmailAndProfile();
         this.getUserName();
-      },2000)
+      },4000)
      
     }
 
   
      getUserEmailAndProfile = async() =>{
         try {
+
+          
             const email = await AsyncStorage.getItem('email');
             this.setState({email:email});
 
             const profile = await AsyncStorage.getItem("profile");
             this.setState({profile:profile},()=>{
-                console.log("profile",profile);
+               
             })
             
            
@@ -53,7 +56,7 @@ export default class  SideBar extends Component  {
         try {
             const name = await AsyncStorage.getItem('name');
             this.setState({name:name},()=>{
-                console.log("my name123",this.state.name);
+               
             });
             
           
@@ -113,7 +116,7 @@ export default class  SideBar extends Component  {
                         ?
                             <Image style={styles.imageStyles}  source={require('../../Assets/camera.png')} resizeMode="cover" />
                         :
-                            <Image style={styles.imageStyles}  source={{uri:"https://webmobril.org/dev/drillsub/"+this.state.profile}} resizeMode="cover" />
+                            <FastImage style={styles.imageStyles}  source={{uri:"https://webmobril.org/dev/drillsub/"+this.state.profile}} resizeMode="cover" />
                         }
                         
                         <TouchableOpacity
@@ -173,6 +176,22 @@ export default class  SideBar extends Component  {
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={() => {
                         
+                        this.props.navigation.navigate('SavedFinalEstimatePdf')
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            //key: 'PrivacyPolicy', // here there will be no key as 
+                            actions: [
+                                NavigationActions.navigate({ routeName: 'SavedFinalEstimatePdf' }),
+                            
+                            ],
+                        })
+                  
+                        this.props.navigation.dispatch(resetAction);
+                        }}>
+                        <Text style={styles.headingStyle}> Projects Folder </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => {
+                        
                         this.props.navigation.navigate('PrivacyPolicyScreen',{login:1})
                         const resetAction = StackActions.reset({
                             index: 0,
@@ -187,6 +206,7 @@ export default class  SideBar extends Component  {
                         }}>
                         <Text style={styles.headingStyle}> Standard Conditions </Text>
                     </TouchableOpacity>
+                    
                     <TouchableOpacity
                     onPress={()=>{
                         this.props.navigation.navigate('ContactUsScreen')

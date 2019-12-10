@@ -9,19 +9,37 @@ import ApiUrl from '../Utility/ApiUrl';
 class SavedSingleItem extends Component {
 
 
-    editHandler = (cartid ,id,name, size, quantity,price) =>{
+    editHandler = (cartid ,id,name, size, quantity,price,diameter_unit,quantity_unit) =>{
 
-       this.props.navigation.navigate('CategoryDetails',{onRefresh:this.onRefresh,cart_id:cartid ,id:id , name : name, size:size, quantity: quantity,price : price,update:1})
+    
+       this.props.navigation.navigate('CategoryDetails',{onRefresh:this.onRefresh,cart_id:cartid ,id:id , name : name, size:size, quantity: quantity,price : price,update:1,diameter_unit:diameter_unit,quantity_unit:quantity_unit})
 
     }
 
     onRefresh =() =>{
-        console.log("in reresh")
-        // calling function from saved Item 
+      
         this.props.onRefreshPage();
     }
 
     removeHandler =(cartid) =>{
+
+        Alert.alert(
+            'Saved Estimate',
+            "Do you really want to remove the estimate ?",
+            [
+        
+            {text: 'OK', onPress: () => {this.removeSubmitHandler(cartid)}},
+            {text: 'Cancel', onPress: () => {}},
+            
+            ], 
+            { cancelable: false }
+            )
+
+    }
+
+    removeSubmitHandler = (cartid) => {
+
+
 
         let formdata = {
             cart_id :cartid
@@ -36,7 +54,7 @@ class SavedSingleItem extends Component {
             }else{
 
                 Alert.alert(
-                    'Saved Item',
+                    'Saved Estimate',
                     "Something went wrong !Please try again later .",
                     [
                 
@@ -53,7 +71,7 @@ class SavedSingleItem extends Component {
 
             console.log("error",error);
             Alert.alert(
-                'Saved Item',
+                'Saved Estimate',
                 "Check Your Network Connection .! And try again later .",
                 [
             
@@ -65,6 +83,7 @@ class SavedSingleItem extends Component {
 
 
         });
+
     }
 
     render(){
@@ -73,7 +92,7 @@ class SavedSingleItem extends Component {
                 <View style={styles.viewRow}>
                     <Text style={styles.headStyle}>{this.props.data.category_name}</Text>
                     <TouchableOpacity
-                    onPress={()=>{this.editHandler(this.props.data.id ,this.props.data.categoty_id,this.props.data.category_name,this.props.data.size, this.props.data.quantity,this.props.data.total_price)}}>
+                    onPress={()=>{this.editHandler(this.props.data.id ,this.props.data.categoty_id,this.props.data.category_name,this.props.data.size, this.props.data.quantity,this.props.data.total_price,this.props.data.diameter_unit ,this.props.data.quantity_unit)}}>
                         <View >
                             <Text style={styles.editStyle}>Edit</Text>
                         </View>
@@ -94,9 +113,9 @@ class SavedSingleItem extends Component {
                     containerStyle={{backgroundColor:'transparent',borderColor:"transparent",}} 
                     />
 
-                    <Text style={styles.subHeading1}>Size :{this.props.data.size}''</Text>
-                    <Text style={styles.subHeading2}>Qunantity :{this.props.data.quantity}</Text>
-                    <Text style={styles.subHeading3}>Price : ${this.props.data.total_price}</Text>
+                    <Text style={styles.subHeading1}> Size : {this.props.data.size}'' </Text>
+                    <Text style={styles.subHeading2}> Qunantity : {this.props.data.quantity} </Text>
+                    <Text style={styles.subHeading3}> Price : $ {this.props.data.total_price} </Text>
                 </View>
                 <View style={styles.viewLine}></View>
 
@@ -130,7 +149,8 @@ const styles = StyleSheet.create({
     editStyle:{
         color:Colors.yellow_theme,
         flex:1.5,
-        marginLeft:5
+        marginLeft:5,
+        fontWeight:"bold"
     },
     headStyle:{
         fontWeight:"700",

@@ -336,9 +336,11 @@ export default class CategoryDetails extends Component {
 
       
 
-      shareFile= () =>{
+      shareFile= async() =>{
 
-        if(this.requestReadPermission()){
+        const request =  await this.requestReadPermission();
+
+        if(request){
 
             if(this.state.quantity !== ""){
 
@@ -416,6 +418,69 @@ export default class CategoryDetails extends Component {
         
     }
 
+    shareFileIOS = () =>{
+
+        if(this.state.quantity !== ""){
+
+            const  cat_id = this.props.navigation.getParam('id');
+            const size  = this.state.dia;
+            const quantity = this.state.quantity;
+            const url =  "https://webmobril.org/dev/drillsub/api/Mobileapi/pdffilenew?cat_id="+cat_id+"&size="+size+"&quantity="+quantity;
+            this.setState({loading:true});
+            Axios.get(url).then(response => {
+                this.setState({loading:false});
+
+                 console.log("res get",response.data.data);
+                 const { config, fs } = RNFetchBlob
+                 let dirs = RNFetchBlob.fs.dirs
+                 let filePath = dirs.DocumentDir + "/drillsub.pdf"
+                 let options = {
+                   fileCache: true,
+                   path:  filePath,
+                   description : 'pdf'
+                
+                 }
+                config(options).fetch('GET', response.data.data).then(async(res) => {
+                    console.log("response === > ",res);
+                    let filePath = res.path();
+                    let options = {
+                        type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
+                        url:   filePath
+                      };
+                      console.log("opttions=>",options);
+                      await Share.open(options);
+                   
+                });
+
+               
+
+            }).catch(error =>{
+
+            })
+
+
+       
+          
+
+           
+           
+        }else{
+            Alert.alert(
+                'Share File',
+                "Please Add Quantity !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+        }
+
+
+
+    }
+
   
 
     render(){
@@ -423,7 +488,7 @@ export default class CategoryDetails extends Component {
             <View style={{flex:1}}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
-                    <Text style={styles.size}> Size (in Feet)     </Text>
+                    <Text style={styles.size}> Size (in { (this.props.navigation.getParam('diameter_unit','').toUpperCase()) })     </Text>
                     <RNPickerSelect
                         placeholder={{}}
                         value={(this.state && this.state.value_id) || 1}
@@ -434,8 +499,10 @@ export default class CategoryDetails extends Component {
                         style={{
                             inputAndroid: {
                               backgroundColor: 'transparent',
-                              color:"black"
+                              color:"black",
+                             
                             },
+                            inputIOS:pickerSelectStyles.inputIOS,
                             iconContainer: {
                               top: 15,
                               right: 15,
@@ -447,10 +514,15 @@ export default class CategoryDetails extends Component {
                           useNativeAndroidPickerStyle={false}
                           textInputProps={{underlineColorAndroid: 'grey'}}
                         />
-
-                    <Text style={styles.size}> Quantity (Each) </Text>
+                    {this.props.navigation.getParam('quantity_unit','') !== ""
+                    ?
+                    <Text style={styles.size}> Quantity (in {(this.props.navigation.getParam('quantity_unit','')).toUpperCase()}) </Text>
+                    :
+                    <Text style={styles.size}> Quantity </Text>
+                    }
+                    
                     <TextInput 
-                    style={{marginTop:10}}
+                    style={{marginTop:Platform.OS == "android" ? 10 :20, marginLeft:Platform.OS == 'android' ? 0 : 10}}
                     placeholder ="Enter Quantity" 
                     keyboardType="numeric"
                     onChangeText={(value)=> {this.setState({quantity:value},()=>{
@@ -462,7 +534,7 @@ export default class CategoryDetails extends Component {
 
                     <CustomButton text="Save" onPressHandler={()=>{this.saveHandler()}}/>
                     <CustomButton text="Generate PDF" onPressHandler={()=>{this.generatePDF()}}/>
-                    <CustomButton text="Share File" onPressHandler={()=>{this.shareFile()}}/>
+                    <CustomButton text="Share File" onPressHandler={()=>{Platform.OS == 'android' ? this.shareFile() : this.shareFileIOS()}}/>
                 
 
                 </View>
@@ -523,12 +595,10 @@ const pickerSelectStyles = StyleSheet.create({
       fontSize: 16,
       paddingVertical: 10,
       paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: 'gray',
-      borderRadius: 0,
+     
       color: 'black',
-      margin:20,
-      paddingRight: 30, // to ensure the text is never behind the icon
+     // margin:20,
+     // paddingRight: 30, // to ensure the text is never behind the icon
     },
     inputAndroid: {
         fontSize: 16,

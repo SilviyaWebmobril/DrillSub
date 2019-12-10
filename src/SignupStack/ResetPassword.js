@@ -17,7 +17,8 @@ class SignIn extends Component {
     constructor(props){
         super(props);
         this.state ={
-            isSec :true
+            isSec :true,
+            disabled:false,
         }
     }
 
@@ -29,20 +30,84 @@ class SignIn extends Component {
 
     submitResetPassword = () =>{
 
-        if(this.refs.password.getInputTextValue('password') == "invalid"){
 
-            alert("Password Length must be greater than or equal to 6");
+        if(this.refs.password.getInputTextValue('password') ==  0){
+
+
+            Alert.alert(
+                'Reset Password',
+                "Password must not be Blank!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
             return;
         
-        }
-        if(this.refs.confirm_password.getInputTextValue('confirm_password') == "invalid"){
 
-            alert("Confirm Password Length must be greater than or equal to 6");
+
+        }else if(this.refs.password.getInputTextValue('password') == 1){
+
+
+            Alert.alert(
+                'Reset Password',
+                "Password Length should be minimum of 6 characters !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
             return;
         
+
+
+
         }
+
+        if(this.refs.confirm_password.getInputTextValue('confirm_password') ==  0){
+
+
+            Alert.alert(
+                'Reset Password',
+                "Confirm Password must not be Blank!",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+        
+
+
+        }else if(this.refs.confirm_password.getInputTextValue('confirm_password') == 1){
+
+
+            Alert.alert(
+                'Reset Password',
+                "Confirm Password Length should be minimum of 6 characters !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+        
+
+
+
+        }
+
         if(this.refs.email.getInputTextValue('email') !== "invalid" || this.refs.password.getInputTextValue('password') !== "invalid" || this.refs.confirm_password.getInputTextValue('confirm_password') !== "invalid"){
             this.props.load(true);
+            this.setState({disabled:true});
             var formdata  ={
                
                 "email": this.refs.email.getInputTextValue('email'),
@@ -53,6 +118,7 @@ class SignIn extends Component {
             console.log("formdata",formdata);
             Axios.post(ApiUrl.base_url +  ApiUrl.reset_password,formdata).then(response => {
                 this.props.load(false);
+                this.setState({disabled:false});
                    
                 
                     if(response.data.status == "SUCCESS"){
@@ -80,6 +146,7 @@ class SignIn extends Component {
                 }
             ).catch(error=>{
                 this.props.load(false);
+                this.setState({disabled:false});
                
                 Alert.alert(
                     'Reset Password',
@@ -157,7 +224,7 @@ class SignIn extends Component {
                 error_text="Confirm Password must be greater than 6"
                 />
                
-                <CustomButton text="Submit" onPressHandler={()=>{this.submitResetPassword()}} btn_style={{marginTop:60}}/>
+                <CustomButton text="Submit" disabled={this.state.disabled} onPressHandler={()=>{this.submitResetPassword()}} btn_style={{marginTop:60}}/>
                
             
                

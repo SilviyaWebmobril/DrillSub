@@ -13,9 +13,48 @@ import AsyncStorage from '@react-native-community/async-storage';
 class ForgotPassword extends Component {
 
 
+    state={
+        disabled:false
+    }
+
+
     submitEmail = () =>{
 
-        if(this.refs.email.getInputTextValue('email') !== "invalid" ){
+
+        if(this.refs.email.getInputTextValue('email') == 0){
+
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Email !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+
+        }else if(this.refs.email.getInputTextValue('email') == "invalid"){
+
+            Alert.alert(
+                'Sign Up',
+                "Please Enter Valid Email !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+            return;
+
+            
+        }
+
+        this.setState({disabled:true})
+      
             this.props.load(true);
             var formdata  ={
                
@@ -25,16 +64,16 @@ class ForgotPassword extends Component {
           
             Axios.post(ApiUrl.base_url +  ApiUrl.send_otp,formdata).then(response => {
                 this.props.load(false);
+                this.setState({disabled:false})
                    
                 
                     if(response.data.status == "SUCCESS"){
-    
-                    
+                        
                         this.props.navigation.navigate("OTP",{"email":this.refs.email.getInputTextValue('email')});
     
-                    
     
                     }else{
+                       
                        
                         Alert.alert(
                             'Forgot Password',
@@ -53,6 +92,7 @@ class ForgotPassword extends Component {
                 }
             ).catch(error=>{
                 this.props.load(false);
+                this.setState({disabled:false})
                 
                
                 Alert.alert(
@@ -66,20 +106,7 @@ class ForgotPassword extends Component {
                     { cancelable: false }
                     )
             });
-           }else{
            
-
-            Alert.alert(
-                'Forget Password',
-                "Please enter email",
-                [
-            
-                {text: 'OK', onPress: () => {}},
-                
-                ], 
-                { cancelable: false }
-                )
-        }
             
     
     
@@ -99,12 +126,13 @@ class ForgotPassword extends Component {
                 image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
                 placeholder="Enter Email"
                 text="EMAIL"
+                keyboardType="email-address"
                 inputType="email"
                 error_text="Please Enter Valid Email"
                 />
                
               
-                <CustomButton text="Submit" onPressHandler={()=>{ this.submitEmail()}}/>
+                <CustomButton text="Submit" disabled={this.state.disabled} onPressHandler={()=>{ this.submitEmail()}}/>
                
                
                

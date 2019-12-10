@@ -38,5 +38,9 @@ export default {
     
     submit_final_estimate:"sendemailConfirmation",
 
-    remove_cart :"removecartData"
+    remove_cart :"removecartData",
+
+    pdf_listing: "getCartPdflisting",
+
+    delete_cart : "Cartpdfchangestatus",
 }

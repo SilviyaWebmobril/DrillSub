@@ -71,7 +71,16 @@ export class CustomTextInput extends Component {
     setTextInputValue = (value,type) => {
 
         
-        this.setState({inputTextValue : value})   // saving the input value to some text
+         // saving the input value to some text
+
+        if(type == 'mobile'){
+
+            this.setState({
+                inputTextValue: value.replace(/[^0-9]/g, ''),
+            });
+        }else{
+            this.setState({inputTextValue : value}) 
+        }
      
         this.setState(prevState => ({
                 ...prevState, // get all the prevstate
@@ -157,6 +166,8 @@ export class CustomTextInput extends Component {
 
                 if(this.state.controls.email.valid){
                     return this.state.controls.email.value;
+                }else if(this.state.controls.email.value.length == 0){
+                    return 0;
                 }else{
                     return "invalid";
                 }
@@ -166,8 +177,12 @@ export class CustomTextInput extends Component {
 
                 if(this.state.controls.password.valid){
                     return this.state.controls.password.value;
-                }else{
-                    return "invalid";
+                }else if(this.state.controls.password.value.length == 0){
+                    console.log("val -- ",this.state.controls.password.value);
+                    return 0;
+                }else if(this.state.controls.password.value.length < 6){
+                    console.log("val -- ",this.state.controls.password.value);
+                    return 1;
                 }
                
     
@@ -175,8 +190,11 @@ export class CustomTextInput extends Component {
 
                 if(this.state.controls.confirm_password.valid){
                     return this.state.controls.confirm_password.value;
-                }else{
-                    return "invalid";
+                }else if(this.state.controls.confirm_password.value.length == 0){
+                    return 0;
+                    
+                }else if(this.state.controls.confirm_password.value.length  < 6){
+                    return 1;
                 }
                
     
@@ -202,7 +220,10 @@ export class CustomTextInput extends Component {
 
                 if(this.state.controls.mobile.valid){
                     return this.state.controls.mobile.value;
-                }else{
+                }else if(this.state.controls.mobile.value.length == 0){
+
+                    return 0;
+                }else {
                     return "invalid";
                 }
                

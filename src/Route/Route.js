@@ -20,6 +20,7 @@ import PrivacyPolicy from '../PrivacyPolicyStack/PrivacyPolicy';
 import FinalEstimate from '../SavedItemsStack/FinalEstimate';
 import SendDetails from '../HomeStack/SendDetails';
 import TermsOfUse from '../TermsOfUseStack/TermsOfUse';
+import SavedFinalEstimatePdf  from '../SavedPdfs/SavedFinalEstimatePdf';
 
 
 
@@ -29,6 +30,13 @@ const PrivacyPolicyStack = createStackNavigator({
         screen: PrivacyPolicy
     }
 })
+
+const savedEstimatePdf = createStackNavigator({
+
+    SavedFinalEstimatePdf :{
+        screen : SavedFinalEstimatePdf
+    }
+}) 
 
 const SavedItemStack =  createStackNavigator({
 
@@ -103,6 +111,9 @@ const drawerNavigator  = createDrawerNavigator({
     PrivacyPolicyScreen :{
         screen:PrivacyPolicyStack
     },
+    SavedFinalEstimatePdf:{
+        screen :savedEstimatePdf
+    }
    
 
     

@@ -7,6 +7,10 @@ import Axios from 'axios';
 import ApiUrl from '../Utility/ApiUrl';
 import FinalEstimateItem from './FinalEstimateItem';
 import AsyncStorage from '@react-native-community/async-storage';
+import RNPrint from 'react-native-print';
+import {PermissionsAndroid} from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob'
+import { StackActions, NavigationActions} from 'react-navigation';;
 
 
 export default class FinalEstimate  extends Component {
@@ -99,26 +103,75 @@ export default class FinalEstimate  extends Component {
 
     submitHandler = async() => {
 
-        this.setState({loading:true});
+       
         const name = await AsyncStorage.getItem('name');
+        const user_id = await AsyncStorage.getItem('token');
+
+        if(this.refs.address.getInputTextValue('message') == 'invalid'){
+
+            Alert.alert(
+                'Final Estimate',
+                "Please Enter Project Address",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+            return;
+
+
+        }
+
+        if(this.refs.projectname.getInputTextValue('message') == 'invalid'){
+
+            Alert.alert(
+                'Final Estimate',
+                "Please Enter Project Name",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+        }
 
        
         if(this.refs.address.getInputTextValue('message') !== "invalid"){
 
+            this.setState({loading:true});
+           
             var formdata = new FormData();
-            formdata.append("address",this.refs.address.getInputTextValue('address'));
+            formdata.append("address",this.refs.address.getInputTextValue('message'));
             formdata.append("cart_id",this.props.navigation.getParam('final_check_box',""));
+            formdata.append("project_name",this.refs.projectname.getInputTextValue('message'));
             formdata.append("user_name", name);
-            Axios.post(ApiUrl.base_url+ApiUrl.submit_final_estimate,formdata).then(response=>{
+            formdata.append("user_id",JSON.parse(user_id));
+            Axios.post(ApiUrl.base_url+"totalPriceestimationNew",formdata).then(response=>{
                 this.setState({loading:false});
+                console.log("response ==>", response.data);
                 if(response.data.status == "SUCCESS"){
     
                     Alert.alert(
                         'Final Estimate',
-                        ` ${response.data.message}`,
+                        `${response.data.message} and saved in Projects Folder.`,
                         [
                     
-                        {text: 'OK', onPress: () => {}},
+                        {text: 'OK', onPress: () => {this.props.navigation.navigate('SavedFinalEstimatePdf');
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            //key: 'PrivacyPolicy', // here there will be no key as 
+                            actions: [
+                                NavigationActions.navigate({ routeName: 'SavedFinalEstimatePdf' }),
+                            
+                            ],
+                        })
+                  
+                        this.props.navigation.dispatch(resetAction);}},
                         
                         ], 
                         { cancelable: false }
@@ -126,7 +179,7 @@ export default class FinalEstimate  extends Component {
                 }else{
                     Alert.alert(
                         'Final Estimate',
-                        ` ${response.data.message}`,
+                        `${response.data.message}`,
                         [
                     
                         {text: 'OK', onPress: () => {}},
@@ -137,7 +190,7 @@ export default class FinalEstimate  extends Component {
                 }
     
             }).catch(error =>{
-                console.log("error",error);
+                console.log("error12233",error);
                 this.setState({loading:false});
     
                 Alert.alert(
@@ -171,6 +224,132 @@ export default class FinalEstimate  extends Component {
        
     }
 
+    requestReadPermission =async(url)=> {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                title: 'DrillSub Requires Permission',
+                message:
+                    'DrillSub needs access to your storage ' +
+                    'to download the File',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+                },
+            );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+              
+           
+            return true;
+          } else {
+            
+           return false;
+          }
+        } catch (err) {
+            console.log("on err",err)
+          return false;
+        }
+      }
+
+
+    generatePdfIOS = async(url) => {
+
+   
+
+            const { config, fs } = RNFetchBlob
+            let dirs = RNFetchBlob.fs.dirs
+            let filePath = dirs.DocumentDir + "/drillsub.pdf"
+            let options = {
+              fileCache: true,
+              path:  filePath,
+              description : 'pdf'
+           
+            }
+            config(options).fetch('GET', url).then(async(res) => {
+                console.log("response === > ",res);
+                let filePath = res.path();
+                console.log("File Path",filePath);
+                let options = {
+                    type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
+                    url:   Platform.OS === 'android' ? "file://"+filePath : filePath
+                  };
+                  Alert.alert(
+                    'Final Estimate',
+                    "Final Estimate Pdf has been saved in Files App ,Go to Browse -> On my iPhone -> DrillSub to find the pdf. ",
+                    [
+                
+                    {text: 'OK', onPress: () => {}},
+                    
+                    ], 
+                    { cancelable: false }
+                    )
+                
+               
+            });
+    
+
+      
+      
+
+    }
+ 
+
+    generatePdf = async(url) => {
+
+   
+
+        const request = await this.requestReadPermission(url);
+        console.log("get result",request);
+      
+        if(request){
+
+            const { config, fs } = RNFetchBlob
+            let dirs = RNFetchBlob.fs.dirs
+            let options = {
+              fileCache: true,
+              addAndroidDownloads : {
+                useDownloadManager : true,
+                notification : true,
+                path:  dirs.DownloadDir  + "/drillsub.pdf" ,
+                description : 'pdf'
+              }
+            }
+            config(options).fetch('GET', url).then(async(res) => {
+                console.log("response === > ",res);
+                let filePath = res.path();
+                let options = {
+                    type: 'application/pdf', //if your file isn't mp3 change to the mime type of your file
+                    url:   Platform.OS === 'android' ? "file://"+filePath : filePath
+                  };
+                  console.log("opttions=>",options);
+                 // await Share.open(options);
+               
+            });
+    
+
+        }else{
+
+            Alert.alert(
+                'Final Estimate',
+                "Please Allow access the storage from Settings !",
+                [
+            
+                {text: 'OK', onPress: () => {}},
+                
+                ], 
+                { cancelable: false }
+                )
+
+
+            
+        }
+
+      
+
+    }
+ 
 
     render(){
         return(
@@ -210,6 +389,18 @@ export default class FinalEstimate  extends Component {
                             text="PROJECT ADDRESS"
                             inputType="message"
                             error_text="Please Enter Project Address"
+                            />
+
+                         <CustomTextInput 
+                            ref="projectname"
+                            field_text={{marginLeft:40}}
+                            text_input_width={{width:"80%"}}
+                            image_name={require('../../Assets/pdf.png')} 
+                            image_style={{width:30,height:30,marginTop:10,marginRight:5}} 
+                            placeholder="Enter File Name"
+                            text="SAVE AS PDF"
+                            inputType="message"
+                            error_text="Please Enter File Name"
                             />
                         
                             <CustomButton text="Submit" onPressHandler={()=>{this.submitHandler()}} btn_style={{marginTop:20}}/>

@@ -10,6 +10,7 @@ export default class CustomButton extends Component {
 
                 <TouchableOpacity
                     onPress ={this.props.onPressHandler}
+                    disabled={this.props.disabled}
                     style={[styles.btnStyle, this.props.btn_style]}>
                     <View style={[styles.viewButon,this.props.view_button]}>
                         <Text style={[styles.btnText,this.props.btn_text]}>{this.props.text}</Text>
@@ -30,10 +31,10 @@ const styles = StyleSheet.create({
     },
     btnStyle:{
         width:"80%",
-        height:100,
+        height:60,
         alignSelf:"center",
         flex:1,
-        marginTop:20,
+        marginTop:15,
         justifyContent:"center"
     },
     viewButon:{
