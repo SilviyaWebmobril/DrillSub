@@ -108,6 +108,7 @@ const drawerNavigator  = createDrawerNavigator({
     SavedItemScreen:{
         screen:SavedItemStack
     },
+    //standaed terms and conditions page
     PrivacyPolicyScreen :{
         screen:PrivacyPolicyStack
     },

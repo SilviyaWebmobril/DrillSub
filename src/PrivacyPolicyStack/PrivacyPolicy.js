@@ -4,6 +4,8 @@ import HomeHOC from '../HOC/HomeHOC';
 import ApiUrl from '../Utility/ApiUrl';
 import { WebView } from 'react-native-webview';
 
+// starndard terms and conditions page
+
 export default  class PrivacyPolicy extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -53,7 +55,7 @@ export default  class PrivacyPolicy extends Component {
            <View style={{flex:1}}>
                 <WebView
                     onLoad={() => this.hideSpinner()}
-                    source={{ uri: "https://webmobril.org/dev/drillsub/api/Mobileapi/privacyPolicy" }}
+                    source={{ uri: "https://webmobril.org/dev/drillsub/api/Mobileapi/termsconditions" }}
                     style={{ marginTop: 10 }}
                    
                 />
