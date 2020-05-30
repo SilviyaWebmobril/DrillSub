@@ -4,7 +4,7 @@ import Carousel from 'react-native-banner-carousel';
 
 
 const BannerWidth = Dimensions.get('window').width;
-const BannerHeight = 170;
+const BannerHeight = 200;
 
 const CustomBanner = (props) => {
 
@@ -13,7 +13,7 @@ const CustomBanner = (props) => {
       
         return (
             <View key={index}>
-                <Image style={styles.imageStyle} source={{uri:"https://www.webmobril.org/dev/drillsub/"+image.image}} />
+                <Image style={styles.imageStyle}  source={{uri:"https://www.webmobril.org/dev/drillsub/"+image.image}} />
             </View>
         );
     
@@ -51,6 +51,7 @@ const CustomBanner = (props) => {
         },
        
         imageStyle: {
+            //backgroundColor:"red",
             alignSelf:"center",
             width: "95%",
              height: BannerHeight , 

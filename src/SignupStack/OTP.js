@@ -335,6 +335,7 @@ const styles= StyleSheet.create({
       
     },
     viewRow:{
+        marginTop:20,
         flexDirection:"row",
         alignSelf:"center",
         

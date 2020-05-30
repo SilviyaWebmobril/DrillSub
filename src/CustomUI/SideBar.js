@@ -64,7 +64,7 @@ export default class  SideBar extends Component  {
        
         }
      }
-  
+  //hello
      showLogoutAlert = () =>{
         Alert.alert(
             'Logout',

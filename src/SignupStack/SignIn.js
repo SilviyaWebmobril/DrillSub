@@ -170,7 +170,7 @@ class SignIn extends Component {
     render(){
         return(
 
-            <View style={{flex:8,height:null,}}>
+             <>
                 <CustomLogo />
                 <Text style={styles.customHeader}> Sign In</Text>
                
@@ -234,7 +234,7 @@ class SignIn extends Component {
                 </View>
                 
                
-            </View>
+             </>
         );
     }
 }
@@ -252,7 +252,7 @@ const styles= StyleSheet.create({
         flexDirection:"column",
         alignSelf:'center',
         marginTop:10,
-        flex:1,
+       // flex:1,
       
     },
     viewRow:{
@@ -263,8 +263,9 @@ const styles= StyleSheet.create({
     viewRow1:{
         flexDirection:"row",
         alignSelf:"center",
-        marginTop:20,
-        flex:1
+       
+        //backgroundColor:"blue",
+       // flex:1
         
     },
     textTerms:{

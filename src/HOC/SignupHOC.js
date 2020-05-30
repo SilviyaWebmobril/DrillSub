@@ -33,11 +33,11 @@ const SignUpHOC = (WrappedComponent) => {
         render(){
         
             return(
-                    <View style={{flex:1,height:"100%"}}>
+                    //  <View style={{flex:1,height:"100%"}}>
                          
-                        <KeyboardAwareScrollView style={styles.container}>
+                        <KeyboardAwareScrollView contentContainerStyle={styles.container} automaticallyAdjustContentInsets={true}>
 
-                            <View >
+                            < >
                                 <ImageBackground source={require('../../Assets/signup-bggg.png')}resizeMode="stretch" style={styles.imageContainer} >
                                   {this.props.navigation.state.routeName !== "SignIn"
                                   ?
@@ -58,12 +58,9 @@ const SignUpHOC = (WrappedComponent) => {
                                 
                               
      
-                            </View>
-                         
-                      
-                                
-                        </KeyboardAwareScrollView>
-                        {
+                            </>
+
+                            {
                             this.state.loading  &&
                             <View
                               style={[
@@ -73,18 +70,23 @@ const SignUpHOC = (WrappedComponent) => {
                             >
                               <ActivityIndicator size="large" />
                             </View>
+                              
+                          }
+                          {
+                              this.state.showalert  ?
                             
-                        }
-                         {
-                            this.state.showalert  ?
-                           
-                                <CustomAlert  {...this.props} showAlert={this.showAlert} />
-                                :
-                                <View/>
-                            
-                        }
+                                  <CustomAlert  {...this.props} showAlert={this.showAlert} />
+                                  :
+                                  <View/>
+                              
+                          }
+                         
+                      
+                                
+                        </KeyboardAwareScrollView>
+                       
                         
-                    </View>
+                    // </View> 
                    
                
 
@@ -104,20 +106,23 @@ export default SignUpHOC;
 const styles = StyleSheet.create({
 
     container:{
-        
+        flexGrow:1,
         backgroundColor: 'transparent',
+        paddingTop:30,
+        justifyContent:"space-between",
+        alignItems:"center",
        
       
       
     },
     imageContainer:{
        // zIndex: -1,
-    //    width:Dimensions.get("window").width,
-      //  height:Dimensions.get("window").height,
-        flex:1,
+       width:Dimensions.get("window").width,
+        height:Dimensions.get("window").height,
+      //  flex:1,
         
-        paddingTop:100,
-        paddingBottom: DeviceInfo.isTablet() ? 350 : 300,
+        paddingTop:120,
+        //paddingBottom: DeviceInfo.isTablet() ? 350 : 300,
         paddingRight:20,
         paddingLeft:20
         
