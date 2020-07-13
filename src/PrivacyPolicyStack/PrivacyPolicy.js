@@ -54,6 +54,7 @@ export default  class PrivacyPolicy extends Component {
         return(
            <View style={{flex:1}}>
                 <WebView
+                    useWebkit={true}
                     onLoad={() => this.hideSpinner()}
                     source={{ uri: "https://webmobril.org/dev/drillsub/api/Mobileapi/termsconditions" }}
                     style={{ marginTop: 10 }}
