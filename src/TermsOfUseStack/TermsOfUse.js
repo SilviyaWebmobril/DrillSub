@@ -53,6 +53,7 @@ export default  class TermsOfUse extends Component {
            <View style={{flex:1}}>
                 <WebView
                     onLoad={() => this.hideSpinner()}
+                    useWebkit={true}
                     source={{ uri: "https://webmobril.org/dev/drillsub/api/Mobileapi/terms" }}
                     style={{ marginTop: 10 }}
                    
